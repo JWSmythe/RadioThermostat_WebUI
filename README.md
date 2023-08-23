@@ -42,26 +42,26 @@ it into a product, please contact me for licensing.
    4) Cron or similar scheduler, if you want MQTT and/or MRTG to work.
 
 ===== Files ================================================================= 
-   mrtg.thermostat.conf - MRTG configuration file, for temp/target graph
-   phpMQTT.php          - MQTT library from https://github.com/bluerhinos/phpMQTT
-   tstat_api_gw.php     - PHP to send API requests directly to the thermostat
-   tstat_gloabls.php    - Global variables used by the PHP files.
-   tstat_info.php       - A dump of all the API calls supported by the thermostat.  
+   * mrtg.thermostat.conf - MRTG configuration file, for temp/target graph
+   * phpMQTT.php          - MQTT library from https://github.com/bluerhinos/phpMQTT
+   * tstat_api_gw.php     - PHP to send API requests directly to the thermostat
+   * tstat_gloabls.php    - Global variables used by the PHP files.
+   * tstat_info.php       - A dump of all the API calls supported by the thermostat.  
                           This is slow, but is only used for developing new features.
-   tstat_main.html      - The main page.  You should copy this to index.html
-   tstat_poll_mnqtt.php - This is run by the cron to send out current mqtt data.
-   tstat_poll_mrtg.php  - This is run by the cron, to update the graphs.
-   tstat_scheduler.php  - Editor for the scheduler.
-   whoami.php           - Simple page to show what $_SERVER $_GET, $_POST, $_REQUEST, and $_COOKIE are present.  
+   * tstat_main.html      - The main page.  You should copy this to index.html
+   * tstat_poll_mnqtt.php - This is run by the cron to send out current mqtt data.
+   * tstat_poll_mrtg.php  - This is run by the cron, to update the graphs.
+   * tstat_scheduler.php  - Editor for the scheduler.
+   * whoami.php           - Simple page to show what $_SERVER $_GET, $_POST, $_REQUEST, and $_COOKIE are present.  
                           You can include this into other php pages, while developing.
 
-   ./docs/              - This directory contains the user manual for the 
+   * ./docs/              - This directory contains the user manual for the 
                           Radio Thermostat CT-50, CT80, 3M50, and CT-30, as 
                           well as the API doc that I found a while back.  
                           If there is a more recent version of the API doc, 
                           I would appreciate getting a copy.
-   ./images/            - Some images for the web interface
-   ./data/              - MRTG data
+   * ./images/            - Some images for the web interface
+   * ./data/              - MRTG data
 ===== Installation ==========================================================
    1) Copy the files for this package to a directory on your local web server.  
    The web server *must* be on the same network segment.  These thermostats
