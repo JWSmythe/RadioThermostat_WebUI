@@ -29,6 +29,8 @@ it into a product, please contact me for licensing.
    * MRTG graphing of the current temperature and target temperature
    * MQTT publish current temperature for other MQTT nodes to use.
 
+   This project isn't complete.  If there is user interest, I may make it more complete.
+
 ===== Requirements ==========================================================
 
    1) A web server that supports PHP, that is on the same network.  
