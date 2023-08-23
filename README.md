@@ -85,5 +85,7 @@ it into a product, please contact me for licensing.
    more datapoints than the typical 5+ minute interval.  This is in the standard 
    Linux/Unix cron format.  Fix your paths for your machine's paths.
    
-   */1 * * * * /usr/bin/mrtg /var/www/htdocs/thermostat/mrtg.thermostat.conf
-   */1 * * * * /usr/local/bin/php /var/www/htdocs/thermostat/tstat_poll_mqtt.php
+   * */1 * * * * /usr/bin/mrtg /var/www/htdocs/thermostat/mrtg.thermostat.conf
+   * */1 * * * * /usr/local/bin/php /var/www/htdocs/thermostat/tstat_poll_mqtt.php
+
+[Note: the daytime section is "*/1 * * * *".  github may show an extra * at the beginning of each line.]
