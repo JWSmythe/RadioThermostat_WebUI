@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- MRTG 2.17.10 -->
+<!-- Begin Head -->
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="refresh" content="300" />
+		<title>Actual Temperature</title>
+<!-- maxin d 77 -->
+<!-- maxout d 75 -->
+<!-- avin d 73 -->
+<!-- avout d 72 -->
+<!-- cuin d 76 -->
+<!-- cuout d 75 -->
+<!-- avmxin d 74 -->
+<!-- avmxout d 72 -->
+<!-- maxin w 78 -->
+<!-- maxout w 75 -->
+<!-- avin w 74 -->
+<!-- avout w 68 -->
+<!-- cuin w 76 -->
+<!-- cuout w 75 -->
+<!-- avmxin w 75 -->
+<!-- avmxout w 69 -->
+<!-- maxin m 80 -->
+<!-- maxout m 75 -->
+<!-- avin m 74 -->
+<!-- avout m 67 -->
+<!-- cuin m 74 -->
+<!-- cuout m 73 -->
+<!-- avmxin m 75 -->
+<!-- avmxout m 70 -->
+<!-- maxin y 80 -->
+<!-- maxout y 75 -->
+<!-- avin y 68 -->
+<!-- avout y 62 -->
+<!-- cuin y 74 -->
+<!-- cuout y 72 -->
+<!-- avmxin y 78 -->
+<!-- avmxout y 75 -->
+		<style>
+			body {
+				background-color: #ffffff;
+				color: #000000;
+			}
+			div {
+				border-bottom: 2px solid #aaa;
+				padding-bottom: 10px;
+				margin-bottom: 5px;
+			}
+			div h2 {
+				font-size: 1.2em;
+			}
+			div.graph img {
+				margin: 5px 0;
+			}
+			div.graph table, div#legend table {
+				font-size: .8em;
+			}
+			div.graph table td {
+				padding: 0 10px;
+				text-align: right;
+			}
+			div table .in th, div table td span.in {
+				color: #00cc00;
+			}
+			div table .out th, div table td span.out {
+				color: #0000ff;
+			}
+			div table .inpeak th {
+				color: #006600;
+			}
+			div table .outpeak th {
+				color: #ff00ff;
+			} 
+			div#legend th {
+				text-align: right;
+			}
+			div#footer {
+				border: none;
+				font-size: .8em;
+				font-family: Arial, Helvetica, sans-serif;
+				width: 476px;
+			}
+			div#footer img {
+				border: none;
+				height: 25px;
+			}
+			div#footer address {
+				text-align: right;
+			}
+			div#footer #version {
+				margin: 0;
+				padding: 0;
+				float: left;
+				width: 88px;
+				text-align: right;
+			}
+		</style>
+	</head>
+<!-- End Head -->
+<body>
+    <h1>Actual Temperature</h1>
+    <p>The statistics were last updated <strong>Wednesday, 23 August 2023 at 14:25</strong>,<br />
+at which time <strong>'unknown'</strong> had been up for <strong>2</strong>.</p>
+<!-- Begin `Daily' Graph (5 Minute interval) -->
+		<div class="graph">
+			<h2>`Daily' Graph (5 Minute Average)</h2>
+			<img src="tstat.temp-day.png" title="day" alt="day" />
+			<table>
+				<tr>
+					<th></th>
+					<th scope="col">Max</th>
+					<th scope="col">Average</th>
+					<th scope="col">Current</th>
+				</tr>
+				<tr class="in">
+					<th scope="row">Actual TempF:</th>
+					<td>77.0 F</td>
+					<td>73.0 F </td>
+					<td>76.0 F </td>
+				</tr>
+				<tr class="out">
+					<th scope="row">Target TempF:</th>
+					<td>75.0 F </td>
+					<td>72.0 F </td>
+					<td>75.0 F </td>
+				</tr>
+			</table>
+		</div>
+<!-- End `Daily' Graph (5 Minute interval) -->
+
+<!-- Begin `Weekly' Graph (30 Minute interval) -->
+		<div class="graph">
+			<h2>`Weekly' Graph (30 Minute Average)</h2>
+			<img src="tstat.temp-week.png" title="week" alt="week" />
+			<table>
+				<tr>
+					<th></th>
+					<th scope="col">Max</th>
+					<th scope="col">Average</th>
+					<th scope="col">Current</th>
+				</tr>
+				<tr class="in">
+					<th scope="row">Actual TempF:</th>
+					<td>78.0 F</td>
+					<td>74.0 F </td>
+					<td>76.0 F </td>
+				</tr>
+				<tr class="out">
+					<th scope="row">Target TempF:</th>
+					<td>75.0 F </td>
+					<td>68.0 F </td>
+					<td>75.0 F </td>
+				</tr>
+			</table>
+		</div>
+<!-- End `Weekly' Graph (30 Minute interval) -->
+
+<!-- Begin `Monthly' Graph (2 Hour interval) -->
+		<div class="graph">
+			<h2>`Monthly' Graph (2 Hour Average)</h2>
+			<img src="tstat.temp-month.png" title="month" alt="month" />
+			<table>
+				<tr>
+					<th></th>
+					<th scope="col">Max</th>
+					<th scope="col">Average</th>
+					<th scope="col">Current</th>
+				</tr>
+				<tr class="in">
+					<th scope="row">Actual TempF:</th>
+					<td>80.0 F</td>
+					<td>74.0 F </td>
+					<td>74.0 F </td>
+				</tr>
+				<tr class="out">
+					<th scope="row">Target TempF:</th>
+					<td>75.0 F </td>
+					<td>67.0 F </td>
+					<td>73.0 F </td>
+				</tr>
+			</table>
+		</div>
+<!-- End `Monthly' Graph (2 Hour interval) -->
+
+<!-- Begin `Yearly' Graph (1 Day interval) -->
+		<div class="graph">
+			<h2>`Yearly' Graph (1 Day Average)</h2>
+			<img src="tstat.temp-year.png" title="year" alt="year" />
+			<table>
+				<tr>
+					<th></th>
+					<th scope="col">Max</th>
+					<th scope="col">Average</th>
+					<th scope="col">Current</th>
+				</tr>
+				<tr class="in">
+					<th scope="row">Actual TempF:</th>
+					<td>80.0 F</td>
+					<td>68.0 F </td>
+					<td>74.0 F </td>
+				</tr>
+				<tr class="out">
+					<th scope="row">Target TempF:</th>
+					<td>75.0 F </td>
+					<td>62.0 F </td>
+					<td>72.0 F </td>
+				</tr>
+			</table>
+		</div>
+<!-- End `Yearly' Graph (1 Day interval) -->
+
+<!-- Begin Legend -->
+		<div id="legend">
+			<table>
+				<tr class="in">
+					<th scope="row">GREEN ###</th>
+					<td>State:</td>
+				</tr>
+				<tr class="out">
+					<th scope="row">BLUE ###</th>
+					<td>Outgoing Traffic in Bytes per Second</td>
+				</tr>
+				<tr class="inpeak">
+					<th scope="row">DARK GREEN ###</th>
+					<td>Maximal 5 Minute Incoming Traffic</td>
+				</tr>
+				<tr class="outpeak">
+					<th scope="row">MAGENTA ###</th>
+					<td>Maximal 5 Minute Outgoing Traffic</td>
+				</tr>
+			</table>
+		</div>
+<!-- End Legend -->
+<!-- Begin MRTG Block -->
+		<div id="footer">
+			<a href="http://oss.oetiker.ch/mrtg/"><img src="mrtg-l.png" width="63" title="MRTG" alt="MRTG" /><img src="mrtg-m.png" width="25" title="MRTG" alt="MRTG" /><img src="mrtg-r.png" width="388" title="Multi Router Traffic Grapher" alt="Multi Router Traffic Grapher" /></a>
+			<p id="version">2.17.10</p>
+			<address>
+				<a href="http://tobi.oetiker.ch/">Tobias Oetiker</a>
+				<a href="mailto:tobi+mrtglink@oetiker.ch">&lt;tobi@oetiker.ch&gt;</a><br />
+and				<a href="http://www.bungi.com/">Dave Rand</a>
+				<a href="mailto:dlr@bungi.com">&lt;dlr@bungi.com&gt;</a>
+			</address>
+		</div>
+<!-- End MRTG Block -->
+	</body>
+</html>
+

@@ -1,0 +1,372 @@
+<html>
+<head>
+   <title>Radio Thermostat Thermostat</title>
+</head>
+<body>
+   <style>
+      body {
+         background-color: #f0f0f0;
+         font-family: Arial, Helvetica, sans-serif;
+      }
+      a {
+         color: inherit; 
+         text-decoration: inherit;
+      }
+
+   </style>
+<table border='1'>
+   <tr>
+   <td style='width:160px;' valign='top'>
+      <table style="height:200px;">
+         <tr><td>Mode: <span style='font-size:20px'><hvac_mode>--</hvac_mode></span></td></tr>
+         <tr><td style="height:30px;">Set</td></tr>
+         <tr><td style="height:60px;"><span style='color:blue; font-size:40px;'>&#10052;</span> Cool</td></tr>
+         <tr><td style="height:60px;"><span style='color:red; font-size:38px;'>&#128293;</span> Heat</td></tr>
+         <tr><td style="height:60px;"><img src='images/automatic_icon_black.png' style='width:40px'> Auto</td></tr>
+      </table>
+   </td>
+            
+      <td rowspan='1' style='width:180px;' valign='top'>
+         Actual
+         <div align='center'><span style='font-size:90px;'><disp_temp>--</disp_temp></span></div>
+         <br><div align='center'><span style='font-size:20px;'>
+            Target: 
+            <span style='color:blue;'><disp_t_cool></disp_t_cool></span>
+            <span style='color:red;'><disp_t_heat></disp_t_heat></span>
+         </div> 
+         <br>
+         <div align='center' style='color:red; font-weight:900;'>
+         <state_hold></state_hold>
+         <state_override></state_override>
+         </div>
+
+<span style='font-size:40px; color:red; float:left;'>&nbsp; &nbsp; <a href='#' onClick='set_temp_up();'>&#129093</a></span> 
+<span style='font-size:40px; color:blue; float:right;'><a href='#' onClick='set_temp_down();'>&#129095</a> &nbsp; &nbsp;</span>
+</td>
+   <td style='width:160px;' valign='top'>
+      <table style="height:200px;">
+      <tr><td>Fan Mode: <span style='font-size:20px'><fan_mode>--</fan_mode></span></td></tr>
+         <tr><td style="height:30px;">Set</td></tr>
+         <tr><td style="height:60px;"><img src='images/power-green.png' style='width:40px'> On <br></td></tr>
+         <tr><td style="height:60px;"><img src='images/power-black.png' style='width:40px'> Off <br></td></tr>
+         <tr><td style="height:60px;"><img src='images/automatic_icon_black.png' style='width:40px'> Auto </td></tr>
+      </table>
+   </td>
+   </tr>
+   <tr>
+      <td colspan='3'>
+         <div align='center'><img src='data/tstat.temp-day.png'></div>
+         Key: <span style='color:green;'>Actual TempF</span>
+         <span style='color:blue;'>Target TempF</span>
+      </td>
+   </tr>
+<tr>
+   <td colspan='3'>
+   <span style='font-weight:700;'>Thermostat Date:</span> <disp_day>---</disp_day> <disp_hour>--</disp_hour>:<disp_min>--</disp_min> 
+   <br>
+   <span style='font-weight:700;'>Model:</span> <disp_model>--</disp_model> (FW: <disp_fw>--</disp_fw>)
+   <br>
+   <span style='font-weight:700;'>Name:</span> <disp_name>--</disp_name>
+   <br>
+   <a href='tstat_main.html'>[Thermostat]</a>
+   <a href='data/tstat.temp.html'>[Data Graphs]</a>
+   <a href='tstat_info.php'>[API Info]</a>
+   <a href='tstat_scheduler.php'>[Schedule]</a>
+   <a href='tstat_api_gw.php'>[API Gateway]</a>
+<!--
+<br>
+   <span style='font-weight:700;'>Manual Actions (testing):</span><br>
+   <a href='#' onClick='set_time();'>[set time]</a>
+   <a href='#' onClick='read_tstat();'>[read thermostat]</a>
+   <a href='#' onClick='read_model();'>[read model]</a>
+   <a href='#' onClick='read_firmware();'>[read firmware]</a>
+-->   
+<br>
+   <span style='font-weight:700;'>Manufacturer Documentation:</span><br>
+   <a href='docs/RadioThermostat CT50 API Guide.pdf' target='new'>[API Documentation]</a><br>
+   <a href='docs/RadioThermostat CT30 Operation Guide.pdf' target='new'>[CT30 Owner's Manual]</a>
+   <a href='docs/RadioThermostat CT50 Operation Guide.pdf' target='new'>[CT50 Owner's Manual]</a><br>
+   <a href='docs/RadioThermostat CT80 Operation Guide.pdf' target='new'>[CT80 Owner's Manual]</a>
+   <a href='docs/RadioThermostat 3M50 Operation Guide.pdf' target='new'>[3M50 Owner's Manual]</a>
+</td>
+</tr>
+</table>   
+
+<script>
+  function read_tstat() {
+   fetch('tstat_api_gw.php/tstat')
+      .then(response => response.json())
+      .then(data => {
+         //console.log(data);
+         //document.getElementById('disp_temp').innerHTML = data.temp;
+         document.querySelector("disp_temp").innerHTML = data.temp;
+
+
+         if(data.tmode == 0){
+            document.querySelector("hvac_mode").innerHTML = "Off";
+         }else if(data.tmode == 1 ){
+            document.querySelector("hvac_mode").innerHTML = "Heat";
+         }else if(data.tmode == 2){
+            document.querySelector("hvac_mode").innerHTML = "Cool";
+         }else if(data.tmode == 3){
+            document.querySelector("hvac_mode").innerHTML = "Auto";
+         }else{
+            document.querySelector("hvac_mode").innerHTML = "Unknown";
+         }
+
+         if (data.fmode == 0){
+            document.querySelector("fan_mode").innerHTML = "Auto";
+         }else if(data.fmode == 1){
+            document.querySelector("fan_mode").innerHTML = "Auto/Circulate";
+         }else if(data.fmode == 2){
+            document.querySelector("fan_mode").innerHTML = "On";
+         }else{
+            document.querySelector("fan_mode").innerHTML = "Unknown";
+         }
+
+         if(data.time.day == 0){
+            document.querySelector("disp_day").innerHTML = "Monday";
+         }else if(data.time.day == 1){
+            document.querySelector("disp_day").innerHTML = "Tuesday";
+         }else if(data.time.day == 2){
+            document.querySelector("disp_day").innerHTML = "Wednesday";
+         }else if(data.time.day == 3){
+            document.querySelector("disp_day").innerHTML = "Thursday";
+         }else if(data.time.day == 4){
+            document.querySelector("disp_day").innerHTML = "Friday";
+         }else if(data.time.day == 5){
+            document.querySelector("disp_day").innerHTML = "Saturday";
+         }else if(data.time.day == 6){
+            document.querySelector("disp_day").innerHTML = "Sunday";
+         }else{
+            document.querySelector("disp_day").innerHTML = "Unknown";
+         }
+
+         document.querySelector("disp_hour").innerHTML = data.time.hour;
+
+         // Make human friendly minutes.  People like 0 padding on minutes, 
+         // but don't care about hours. 
+         if(data.time.minute < 10){
+            document.querySelector("disp_min").innerHTML = "0" + data.time.minute;
+         }else{
+            document.querySelector("disp_min").innerHTML = data.time.minute;
+         }
+         if (data.t_cool > 0){
+            document.querySelector("disp_t_cool").innerHTML = data.t_cool;
+         };
+
+         if (data.t_heat > 0){
+            document.querySelector("disp_t_heat").innerHTML = data.t_heat;
+         };
+
+         if(data.override == 0){
+            document.querySelector("state_override").innerHTML = "";
+         }else if(data.override == 1){
+            document.querySelector("state_override").innerHTML = "Override";
+         }else{
+            document.querySelector("state_override").innerHTML = "Unknown";
+         }
+
+         if(data.hold == 0){
+            document.querySelector("state_hold").innerHTML = "";
+         }else if(data.hold == 1){
+            document.querySelector("state_hold").innerHTML = "Hold";
+         }else{
+            document.querySelector("state_hold").innerHTML = "Unknown";
+         }
+
+      });
+   }
+   
+   function read_model() {
+   fetch('tstat_api_gw.php/tstat/model')
+      .then(response => response.json())
+      .then(data => {
+         //console.log(data);
+         document.querySelector("disp_model").innerHTML = data.model;   
+      });
+   }
+
+   function read_firmware() {
+   fetch('tstat_api_gw.php/sys/firmware')
+      .then(response => response.json())
+      .then(data => {
+         //console.log(data);
+         document.querySelector("disp_fw").innerHTML = data.fw_version;   
+      });
+   }
+
+   function read_name() {
+   fetch('tstat_api_gw.php/sys/name')
+      .then(response => response.json())
+      .then(data => {
+         //console.log(data);
+         document.querySelector("disp_name").innerHTML = data.name;   
+      });
+   }   
+  
+
+  function set_time() {
+   // Get the current day of the week
+   var weekday = new Date().getDay();
+   var post_day;
+
+   // Convert the day to the expected format 0 = Mon 6=Sun
+   if (weekday === 0) {
+      post_day = 6;
+   } else {
+      post_day = weekday - 1;
+   }
+
+   // Get the current hour and minute
+   var date = new Date();
+   var post_hour = date.getHours();
+   var post_minute = date.getMinutes();
+
+      fetch('tstat_api_gw.php/tstat/time', {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({
+            "day": post_day,
+            "hour": post_hour,
+            "minute": post_minute
+         })
+      })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+}
+
+function set_temp_down(){
+   // This lowers the temp by 1 degree in the current HVAC mode.
+   // Get the tmode from the text on the page.  Avoid extra API calls.
+
+   if (document.querySelector("hvac_mode").innerHTML == "Off"){
+      tmode = 0;
+   }else if (document.querySelector("hvac_mode").innerHTML == "Heat"){
+      tmode = 1;
+   }else if (document.querySelector("hvac_mode").innerHTML == "Cool"){
+      tmode = 2;
+   }else if (document.querySelector("hvac_mode").innerHTML == "Auto"){
+      tmode = 3;
+   }else{
+      tmode = "Unknown";
+   }
+
+   t_cool = document.querySelector("disp_t_cool").innerHTML;
+   t_heat = document.querySelector("disp_t_heat").innerHTML;
+
+   if (t_cool > 0){
+      // We're in cooling mode.
+      t_cool = parseInt(document.querySelector("disp_t_cool").innerHTML);
+      t_cool = t_cool-1;
+      t_heat = '';
+
+      this_body = JSON.stringify({
+                                    "tmode": tmode,
+                                    "t_cool": t_cool
+                                 })
+   }else if (t_heat > 0){
+      t_heat = parseInt(document.querySelector("disp_t_heat").innerHTML);
+      t_heat = t_heat-1;
+      t_cool = '';
+      this_body = JSON.stringify({
+                     "tmode": tmode,
+                     "t_cool": t_heat
+                  })
+   };
+   
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+   // Refresh the thermostat for the new value, rather than waiting for it to happen on schedule.
+   read_tstat();
+};
+
+function set_temp_up(){
+   // This lowers the temp by 1 degree in the current HVAC mode.
+   // Get the tmode from the text on the page.  Avoid extra API calls.
+
+   if (document.querySelector("hvac_mode").innerHTML == "Off"){
+      tmode = 0;
+   }else if (document.querySelector("hvac_mode").innerHTML == "Heat"){
+      tmode = 1;
+   }else if (document.querySelector("hvac_mode").innerHTML == "Cool"){
+      tmode = 2;
+   }else if (document.querySelector("hvac_mode").innerHTML == "Auto"){
+      tmode = 3;
+   }else{
+      tmode = "Unknown";
+   }
+
+   t_cool = document.querySelector("disp_t_cool").innerHTML;
+   t_heat = document.querySelector("disp_t_heat").innerHTML;
+
+   if (t_cool > 0){
+      // We're in cooling mode.
+      t_cool = parseInt(document.querySelector("disp_t_cool").innerHTML);
+      t_cool = t_cool+1;
+      t_heat = '';
+
+      this_body = JSON.stringify({
+                                    "tmode": tmode,
+                                    "t_cool": t_cool
+                                 })
+   }else if (t_heat > 0){
+      t_heat = parseInt(document.querySelector("disp_t_heat").innerHTML);
+      t_heat = t_heat+1;
+      t_cool = '';
+      this_body = JSON.stringify({
+                     "tmode": tmode,
+                     "t_cool": t_heat
+                  })
+   };
+   
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+   // Refresh the thermostat for the new value, rather than waiting for it to happen on schedule.
+   read_tstat();   
+};
+
+   // Read thermostat immediately, and then update every 10 seconds.   
+   // Anything shorter overwhelms the thermostat.
+   // It automatically updates on temp changes, so this is kind of redundant, 
+   // other than to get current tempeture updates. 
+   read_tstat();
+   setInterval(read_tstat, 10000);
+   // These only run once.  Call them again if they somehow change.
+   read_name();
+   read_model();
+   read_firmware();
+   set_time(); // Time sets to the time on the most recent browser.  
+               // Make sure your system time is correct. 
+</script> 
