@@ -12,7 +12,9 @@
          color: inherit; 
          text-decoration: inherit;
       }
-
+      a:hover {
+         font-weight: bold;
+      };
       table {
          // border-collapse: collapse; 
       }
@@ -20,7 +22,7 @@
       tr:nth-child(even) {background-color: #ccccf2;}
       tr:nth-child(odd) {background-color: #ccf2cc;}
    </style>
-
+<a href='tstat_main.html'>[Back to main page]</a>
 <?php
 require_once("tstat_globals.php");
 //$host_name = "192.168.1.101";
@@ -35,9 +37,12 @@ if (isset($_REQUEST['mode'])){
       $mode = "Unknown";
    };
 }else{
-   $mode = "cool";   // Just default to cooling mode.   That's more likely in my region.
+   // Set default mode to cooling.   That's more likely in my region.
+   $_REQUEST['mode'] = "cool";      
+   $mode = "cool";   
 };
 
+//print "Request mode: " . $_REQUEST['mode'] . " Set mode: $mode<br>";
 
 if (isset($_REQUEST['action'])){
    // ===== Acquire from POST, and store to thermostat ==========================
@@ -127,13 +132,28 @@ print "
       print "</tr>";
    };
    print "<tr><td colspan='7'>Current Mode: $mode | Set Mode:";
-   print "
-   <a href='" . $_SERVER['PHP_SELF'] . "?mode=cool'>[ Cool ]</a> |
-   <a href='" . $_SERVER['PHP_SELF'] . "?mode=heat'>[ Heat ]</a> 
-   ";
+   if ($mode == "cool"){
+      print "
+      <a href='" . $_SERVER['PHP_SELF'] . "?mode=cool'>[ <b>Cool</b> ]</a> |
+      <a href='" . $_SERVER['PHP_SELF'] . "?mode=heat'>[ Heat ]</a> 
+      ";
+   }elseif($mode == "heat"){
+      print "
+      <a href='" . $_SERVER['PHP_SELF'] . "?mode=cool'>[ Cool ]</a> |
+      <a href='" . $_SERVER['PHP_SELF'] . "?mode=heat'>[ <b>Heat</b> ]</a> 
+      ";
+   }else{
+      print "
+      <a href='" . $_SERVER['PHP_SELF'] . "?mode=cool'>[ <b>Cool</b> ]</a> |
+      <a href='" . $_SERVER['PHP_SELF'] . "?mode=heat'>[ <b>Heat</b> ]</a> 
+      ";
+   };   
 
 print "</td>";
-print "<td colspan='8'><input type='submit' name='action' value='Update Schedule'></td></tr>";
+
+print "<td colspan='8'>";
+print "<input type='hidden' name='mode' size='5' value='" . $_REQUEST['mode'] . "'>  ";
+print "<input type='submit' name='action' value='Update Schedule'></td></tr>";
 print "</table>";
 print "</form>";
 
@@ -152,6 +172,16 @@ print "
 <li>There are 4 programmable time slots per day.  The times can be adjusted as desired. 
 <li>Each day has two columns, one for the time and one for the temperature of each slot per day.
 <li>Set all time and temperature pairs, and hit Update to save the schedule.
+<li>Check your power company's peak energy hours to see when the schedule should hit. 
+<br>
+<a href='https://www.duke-energy.com/business/billing/time-of-use-rate/how-it-works'>Duke Energy</a> | 
+<a href='https://www.tampaelectric.com/49c554/siteassets/files/energyplanner/energyplannerbrochure.pdf'>Tampa Electric (TECO)</a> | 
+<a href='https://www.fpl.com/rates/time-of-use.html'>Florida Power (FPL)</a> |
+<a href='https://www.coned.com/en/accounts-billing/your-bill/time-of-use'>Con Ed</a> |
+<a href='https://www.ladwp.com/ladwp/faces/ladwp/residential/r-customerservices/r-cs-understandingyourrates/r-cs-ur-electricrates;jsessionid=mbXjlbyVXyDMh61pdnVC6rRyg5yMRkN4Yl6FthTbfLjBFNKCDy8Q!-1415180632?_afrLoop=1520291645735433&_afrWindowMode=0&_afrWindowId=null#%40%3F_afrWindowId%3Dnull%26_afrLoop%3D1520291645735433%26_afrWindowMode%3D0%26_adf.ctrl-state%3D15md9ggw74_4'>Los Angeles (LADWP)</a> | 
+<br>
+<a href='https://www.google.com/search?q=%5BYour+Power+Company%5D+peak+hour+rates'>Find Yours on Google</a> | 
+<a href='https://github.com/JWSmythe/RadioThermostat_UI/issues'>Submit more on Github</a>
 </ul>
 ";
 
@@ -185,8 +215,14 @@ function post_info($key, $data){
    $postData = $data;
    curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
    curl_setopt($ch, CURLOPT_POST, 1); 
+   curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
    $response = curl_exec($ch);
-   print $response;  
+   //print "Test Response: \"$response\"<br>";  
+   if ($response == '{"success": 0}'){
+      print "Update Successful<br>";
+   }else{
+      print "Update Failed with code $response<br>";
+   };
    curl_close($ch);
    return(true);
 };

@@ -12,53 +12,86 @@
          color: inherit; 
          text-decoration: inherit;
       }
+      a:hover {
+         font-weight: bold;
+      };
 
    </style>
 <table border='1'>
    <tr>
+   <!-- Begin HVAC Mode Settings -------------------------------------------->   
    <td style='width:160px;' valign='top'>
-      <table style="height:200px;">
+      <table style="height:200px;" border='0'>
          <tr><td>Mode: <span style='font-size:20px'><hvac_mode>--</hvac_mode></span></td></tr>
-         <tr><td style="height:30px;">Set</td></tr>
-         <tr><td style="height:60px;"><span style='color:blue; font-size:40px;'>&#10052;</span> Cool</td></tr>
-         <tr><td style="height:60px;"><span style='color:red; font-size:38px;'>&#128293;</span> Heat</td></tr>
-         <tr><td style="height:60px;"><img src='images/automatic_icon_black.png' style='width:40px'> Auto</td></tr>
+         <tr><td style="height:20px;">Set</td></tr>
+         <tr><td style="height:60px;">
+            <a href='#' onClick='set_mode_off();'><img src='images/power-black.png' style='width:40px'> Off</a>
+         </td><tr>
+         <tr><td style="height:60px;">
+            <a href='#' onClick='set_mode_heat();'><span style='color:red; font-size:40px;'>&#128293;</span> Heat</a>
+         </td></tr>            
+         <tr><td style="height:60px;">
+            <a href='#' onClick='set_mode_cool();'><span style='color:blue; font-size:40px;'>&#10052;</span> Cool</a>
+         </td></tr>
+         <tr><td style="height:60px;">
+            <a href='#' onClick='set_mode_auto();'><img src='images/automatic_icon_black.png' style='width:40px'> Auto</a>
+         </td></tr>
       </table>
    </td>
-            
-      <td rowspan='1' style='width:180px;' valign='top'>
-         Actual
-         <div align='center'><span style='font-size:90px;'><disp_temp>--</disp_temp></span></div>
-         <br><div align='center'><span style='font-size:20px;'>
-            Target: 
-            <span style='color:blue;'><disp_t_cool></disp_t_cool></span>
-            <span style='color:red;'><disp_t_heat></disp_t_heat></span>
-         </div> 
-         <br>
-         <div align='center' style='color:red; font-weight:900;'>
-         <state_hold></state_hold>
-         <state_override></state_override>
-         </div>
-
-<span style='font-size:40px; color:red; float:left;'>&nbsp; &nbsp; <a href='#' onClick='set_temp_up();'>&#129093</a></span> 
-<span style='font-size:40px; color:blue; float:right;'><a href='#' onClick='set_temp_down();'>&#129095</a> &nbsp; &nbsp;</span>
-</td>
+   <!-- End HVAC Mode Settings ---------------------------------------------->
+   <!-- Begin Center Section ------------------------------------------------>
+   <td rowspan='1' style='width:180px;' valign='top'>
+      Actual
+      <div align='center'><span style='font-size:90px;'><disp_temp>--</disp_temp></span></div>
+      <br><div align='center'><span style='font-size:20px;'>
+         Target: 
+         <span style='color:blue;'><disp_t_cool></disp_t_cool></span>
+         <span style='color:red;'><disp_t_heat></disp_t_heat></span>
+      </div> 
+      <br>
+      <div align='center' style='color:red; font-weight:900;'>
+      <state_hold></state_hold>
+      <state_override></state_override>
+      </div>
+      <span style='font-size:40px; color:red; float:left;'>&nbsp; &nbsp; <a href='#' onClick='set_temp_up();'>&#129093</a></span> 
+      <span style='font-size:40px; color:blue; float:right;'><a href='#' onClick='set_temp_down();'>&#129095</a> &nbsp; &nbsp;</span>
+   </td>
+   <!-- End Center Section -------------------------------------------------->
+   <!-- Begin Fan Mode Settings --------------------------------------------->
    <td style='width:160px;' valign='top'>
       <table style="height:200px;">
       <tr><td>Fan Mode: <span style='font-size:20px'><fan_mode>--</fan_mode></span></td></tr>
          <tr><td style="height:30px;">Set</td></tr>
-         <tr><td style="height:60px;"><img src='images/power-green.png' style='width:40px'> On <br></td></tr>
-         <tr><td style="height:60px;"><img src='images/power-black.png' style='width:40px'> Off <br></td></tr>
-         <tr><td style="height:60px;"><img src='images/automatic_icon_black.png' style='width:40px'> Auto </td></tr>
+         <tr><td style="height:60px;">
+            <a href='#' onClick='set_fan_off();'><img src='images/power-black.png' style='width:40px'> Off</a>
+         </td></tr>
+         <tr><td style="height:60px;">
+            <a href='#' onClick='set_fan_on();'><img src='images/power-green.png' style='width:40px'> On</a>
+         </td></tr>
+         <tr><td style="height:60px;">
+            <a href='#' onClick='set_fan_auto();'><img src='images/automatic_icon_black.png' style='width:40px'> Auto</a>
+         </td></tr>
       </table>
    </td>
+   <!-- End Fan Mode Settings ----------------------------------------------->
    </tr>
    <tr>
+			<!--- 	<div align='center'>
+						<a href='data/tstat.temp.html'><img src='data/tstat.temp-day.png'></a></div> 
+						Key: <span style='color:green;'>Actual TempF</span>
+					<span style='color:blue;'>Target TempF</span>
+					</div>
+			--->
       <td colspan='3'>
-         <div align='center'><img src='data/tstat.temp-day.png'></div>
-         Key: <span style='color:green;'>Actual TempF</span>
-         <span style='color:blue;'>Target TempF</span>
+			1 day:<br>
+			<iframe src='tstat_temp_graph.php?width=500&height=200&days=1.25' width=500 height=210 frameBorder="0" scrolling="no"></iframe>
       </td>
+	</tr>
+	<tr>
+      <td colspan='3'>
+			7 days:<br>
+			<iframe src='tstat_temp_graph.php?width=500&height=200&days=7' width=500 height=210 frameBorder="0" scrolling="no"></iframe>
+      </td>	  
    </tr>
 <tr>
    <td colspan='3'>
@@ -68,11 +101,13 @@
    <br>
    <span style='font-weight:700;'>Name:</span> <disp_name>--</disp_name>
    <br>
-   <a href='tstat_main.html'>[Thermostat]</a>
-   <a href='data/tstat.temp.html'>[Data Graphs]</a>
-   <a href='tstat_info.php'>[API Info]</a>
-   <a href='tstat_scheduler.php'>[Schedule]</a>
-   <a href='tstat_api_gw.php'>[API Gateway]</a>
+   <a href='tstat_main.html'>Main</a> |
+   <a href='tstat_multi.php'>Day/week/month graph</a> |
+   <a href='tstat_scheduler.php'>Schedule</a> <br>
+   <!-- <a href='data/tstat.temp.html'>MRTG Graphs</a><br> -->
+   <a href='tstat_info.php'>API Info</a> |
+   <a href='tstat_api_gw.php'>API Gateway</a> |
+   <a href='https://github.com/JWSmythe/RadioThermostat_UI'>Project Github Repo</a>
 <!--
 <br>
    <span style='font-weight:700;'>Manual Actions (testing):</span><br>
@@ -83,11 +118,11 @@
 -->   
 <br>
    <span style='font-weight:700;'>Manufacturer Documentation:</span><br>
-   <a href='docs/RadioThermostat CT50 API Guide.pdf' target='new'>[API Documentation]</a><br>
-   <a href='docs/RadioThermostat CT30 Operation Guide.pdf' target='new'>[CT30 Owner's Manual]</a>
-   <a href='docs/RadioThermostat CT50 Operation Guide.pdf' target='new'>[CT50 Owner's Manual]</a><br>
-   <a href='docs/RadioThermostat CT80 Operation Guide.pdf' target='new'>[CT80 Owner's Manual]</a>
-   <a href='docs/RadioThermostat 3M50 Operation Guide.pdf' target='new'>[3M50 Owner's Manual]</a>
+   <a href='docs/RadioThermostat CT50 API Guide.pdf' target='new'>API Documentation</a><br>
+   <a href='docs/RadioThermostat CT30 Operation Guide.pdf' target='new'>CT30 Owner's Manual</a> |
+   <a href='docs/RadioThermostat CT50 Operation Guide.pdf' target='new'>CT50 Owner's Manual</a> <br>
+   <a href='docs/RadioThermostat CT80 Operation Guide.pdf' target='new'>CT80 Owner's Manual</a> |
+   <a href='docs/RadioThermostat 3M50 Operation Guide.pdf' target='new'>3M50 Owner's Manual</a> <br>
 </td>
 </tr>
 </table>   
@@ -114,8 +149,8 @@
             document.querySelector("hvac_mode").innerHTML = "Unknown";
          }
 
-         if (data.fmode == 0){
-            document.querySelector("fan_mode").innerHTML = "Auto";
+if (data.fmode == 0){
+            document.querySelector("fan_mode").innerHTML = "Off";
          }else if(data.fmode == 1){
             document.querySelector("fan_mode").innerHTML = "Auto/Circulate";
          }else if(data.fmode == 2){
@@ -123,6 +158,7 @@
          }else{
             document.querySelector("fan_mode").innerHTML = "Unknown";
          }
+
 
          if(data.time.day == 0){
             document.querySelector("disp_day").innerHTML = "Monday";
@@ -300,6 +336,168 @@ function set_temp_down(){
    read_tstat();
 };
 
+   <!--
+      /*
+      // The API documentation lists fmode wrong.  
+      0: AUTO  |  1: AUTO/CIRCULATE |  2: ON
+      I believe it is actually 
+      O: Off | 1: Auto | 2: ON 
+      */
+   -->
+
+function set_mode_off(){
+   this_body = JSON.stringify({
+                     "tmode": 0,
+                  })
+   
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+};
+
+function set_mode_heat(){
+   this_body = JSON.stringify({
+                     "tmode": 1,
+                  })
+   
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+};
+
+function set_mode_cool(){
+   this_body = JSON.stringify({
+                     "tmode": 2,
+                  })
+   
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+};
+
+function set_mode_auto(){
+   this_body = JSON.stringify({
+                     "tmode": 3,
+                  })
+   
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+};
+
+
+
+// ----- FAN MODES ----------------------------------------------------------
+
+function set_fan_off(){
+   this_body = JSON.stringify({
+                     "fmode": 0,
+                  })
+   
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+};
+
+function set_fan_on(){
+   this_body = JSON.stringify({
+                     "fmode": 2,
+                  })
+   
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+};
+
+function set_fan_auto(){
+   this_body = JSON.stringify({
+                     "fmode": 1
+                  })
+   
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+};
+
+// ----- Temperature Settings ------------------------------------------------
+
 function set_temp_up(){
    // This lowers the temp by 1 degree in the current HVAC mode.
    // Get the tmode from the text on the page.  Avoid extra API calls.
@@ -357,12 +555,12 @@ function set_temp_up(){
    read_tstat();   
 };
 
-   // Read thermostat immediately, and then update every 10 seconds.   
+   // Read thermostat immediately, and then update every 15 seconds.   
    // Anything shorter overwhelms the thermostat.
    // It automatically updates on temp changes, so this is kind of redundant, 
    // other than to get current tempeture updates. 
    read_tstat();
-   setInterval(read_tstat, 10000);
+   setInterval(read_tstat, 15000);
    // These only run once.  Call them again if they somehow change.
    read_name();
    read_model();

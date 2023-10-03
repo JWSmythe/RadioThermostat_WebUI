@@ -1,23 +1,24 @@
 
 Radio Thermstat Web Interface
-Radio Thermostat CT-50, CT80, 3M50 CT-30
+Radio Thermostat CT-50, CT80, 3M50, CT-30
 
 - JW Smythe https://jwsmythe.com  jwsmythe[at]jwsmythe.com
 
-v1.0 2023.08.23
+v1.1 2023.09.29 - Finished mode/fan buttons.  Added new graphing.  Bugfixes.
+v1.0 2023.08.23 - First release
 
 This is shared under the non-commercial Creative Commons CC BY-SA.  You may 
 use and share this code for non-commercial purposes.  If you're going to roll
-it into a product, please contact me for licensing.
+it into a product, please contact me for licensing first.
 
 ===== About =================================================================
-   This project is to provide a web interface for the Radio Thermostat CT-50, CT80, 3M50 CT-30 thermostats.
+   This project is to provide a web interface for the Radio Thermostat CT-30, CT-50, CT80, and 3M50  thermostats.
    
    As of May 15, 2023, the official Radio Thermostat web app is being 
    discontinued.  With this, we all lost the web interface, history logging, 
    etc, that their site provided.   This project is to give you that same 
-   functionality.    I did ask them for the site code, so I could match 
-   their old look and feel.  They never responded.   So this is all new code.
+   functionality.  I did ask them for the site code, so I could match 
+   their old look and feel.  They declined. So this is all new code.
 
    It project provides:
 
@@ -29,41 +30,46 @@ it into a product, please contact me for licensing.
    * MRTG graphing of the current temperature and target temperature
    * MQTT publish current temperature for other MQTT nodes to use.
 
-   This project isn't complete.  If there is user interest, I may make it more complete.
-
 ===== Requirements ==========================================================
 
-   1) A web server that supports PHP, that is on the same network.  
-      A RPi or similar would be more than sufficient.
+   1) One of the supported Radio Thermstat thermostats:
+      Radio Thermostat CT-30, CT-50, CT80, and 3M50
+
+   2) A web server that supports PHP, that is on the same network.  
+      A RPi or similar would be more than sufficient.  Even an old desktop 
+      PC running Linux would be fine.  
+
+      PHP will require CURL and SQLite3, but those should be standard.
       
-   2) phpMQTT for the MQTT publish function if so desired.  
+   3) phpMQTT for the MQTT publish function if so desired.  
       https://github.com/bluerhinos/phpMQTT
       
-   3) MRTG installed on host, if you want graphing.
+   4) MRTG installed on host, if you want graphing.
 
-   4) Cron or similar scheduler, if you want MQTT and/or MRTG to work.
+   5) Cron or similar scheduler, if you want graphing to work.
 
 ===== Files ================================================================= 
-   * mrtg.thermostat.conf - MRTG configuration file, for temp/target graph
-   * phpMQTT.php          - MQTT library from https://github.com/bluerhinos/phpMQTT
-   * tstat_api_gw.php     - PHP to send API requests directly to the thermostat
-   * tstat_gloabls.php    - Global variables used by the PHP files.
-   * tstat_info.php       - A dump of all the API calls supported by the thermostat.  
+   mrtg.thermostat.conf - MRTG configuration file, for temp/target graph
+   phpMQTT.php          - MQTT library from https://github.com/bluerhinos/phpMQTT
+   tstat_api_gw.php     - PHP to send API requests directly to the thermostat
+   tstat_gloabls.php    - Global variables used by the PHP files.
+   tstat_info.php       - A dump of all the API calls supported by the thermostat.  
                           This is slow, but is only used for developing new features.
-   * tstat_main.html      - The main page.  You should copy this to index.html
-   * tstat_poll_mnqtt.php - This is run by the cron to send out current mqtt data.
-   * tstat_poll_mrtg.php  - This is run by the cron, to update the graphs.
-   * tstat_scheduler.php  - Editor for the scheduler.
-   * whoami.php           - Simple page to show what $_SERVER $_GET, $_POST, $_REQUEST, and $_COOKIE are present.  
-                          You can include this into other php pages, while developing.
-
-   * ./docs/              - This directory contains the user manual for the 
+   tstat_main.html      - The main page.  You should copy this to index.html
+   tstat_multi.php      - Display of graphs for day/week/month/year
+   tstat_poll.php       - This is run by the cron to update thermostat data,
+                          generate MRTG graphs, push info out to MQTT, etc.
+   tstat_rebuild_db.php - Rebuild the SQLite DB from the CSV file(s).  You 
+                          shouldn't ever need this, unless the DB gets corrupted.
+   tstat_scheduler.php  - Editor for the thermostat scheduler.
+   tstat_temp_graph.php - This generates the graphs for display, from the DB.
+   ./docs/              - This directory contains the user manual for the 
                           Radio Thermostat CT-50, CT80, 3M50, and CT-30, as 
                           well as the API doc that I found a while back.  
                           If there is a more recent version of the API doc, 
                           I would appreciate getting a copy.
-   * ./images/            - Some images for the web interface
-   * ./data/              - MRTG data
+   ./images/            - Some images for the web interface
+   ./data/              - MRTG data
 ===== Installation ==========================================================
    1) Copy the files for this package to a directory on your local web server.  
    The web server *must* be on the same network segment.  These thermostats
@@ -80,14 +86,22 @@ it into a product, please contact me for licensing.
    
    4) Set the crons (below) as necessary for automated tasks.  The scheduler
    itself runs automatically on the thermostat.  There is nothing more to do for that.
+
+   5) You may want to symlink tstat_main.html to index.html, if you don't have
+   anything else in the folder.
    
 ===== Cron ==================================================================
 
-   I have opted to run both the MRTG and MQTT crons once per minute.  That gives 
-   more datapoints than the typical 5+ minute interval.  This is in the standard 
-   Linux/Unix cron format.  Fix your paths for your machine's paths.
+   To get the graphing, we need to poll the thermostat at regular intervals, 
+   and record the data in the csv, db, or optionally mrtg and mqtt. 
    
-   * */1 * * * * /usr/bin/mrtg /var/www/htdocs/thermostat/mrtg.thermostat.conf
-   * */1 * * * * /usr/local/bin/php /var/www/htdocs/thermostat/tstat_poll_mqtt.php
+   This is in the standard Linux/Unix cron format.  Fix your paths for your 
+   machine's paths. If you are running this on a Windows machine, you'll need 
+   to make the appropriate entry in Task Scheduler. 
 
-[Note: the daytime section is "*/1 * * * *".  github may show an extra * at the beginning of each line.]
+   You can set the interval to anything you want.  More frequent polling gives
+   better resolution on your graphs.  5 minutes (*/5) is what many people use.
+   1 minute (*/1) seems to overload the thermostat on occasion, so I don't 
+   recommend 1 minute.  
+   
+   */2 * * * *   /usr/local/bin/php /var/www/htdocs/thermostat/tstat_poll.php >> /var/log/thermostat_cron.log 2>&1
