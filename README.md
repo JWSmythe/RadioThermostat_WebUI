@@ -182,3 +182,38 @@ it into a product, please contact me for licensing first.
       This page is entirely graphs generated from the collected data.  It can help you
       figure out how to schedule your thermostat better, or if there is some operational
       problem to address (i.e., dirty filter)      
+
+===== Security =====
+
+This is not intended to be Internet facing.  If you do, please be sure to use an appropriate 
+htaccess, with both password protection, and restrictions to only allowing your own IP.  If you 
+don't, people will find it, and they will set your thermostat to crazy extremes that will 
+run your power bill up, and potentially risk fire.  I'd prefer my heater doesn't turn on to 90F+
+in the middle of summer.  
+
+===== Bugs / To Do ======
+
+These are things that should be fixed, but haven't been yet.  If you would like to fix them and 
+submit the changes, I'll happily add them, and credit you for your contributions.  
+
+If you find any bugs in the code, feel free to file them as issues, and I will fix them. 
+Send them via the issues tab on Github, or email me directly at jwsmythe[at]jwsmythe.com. 
+
+* The pages don't scale well on mobile devices.
+* Investigate setting a hold mode to disable schedule.  This might improve the manual temp setting.
+* Make the UI pretty, with a consistent header and footer.  I know it's ugly.
+* Look at enabling dehumidifier mode.  This requires a CT-80 Rev B thermostat, which I don't have.
+* Build a cloud interface.  Make it a public service on a new domain.  No documentation is available,
+  but you can change the cloud URL from the AdHoc setup, and running direct web page.  It should be
+  doable. That might be a destructive process. I only have one thermostat, and it is in use.
+  A donated thermostat would be lovely.
+
+* I recognize that I might be the only person still using this thermostat, so all this work may
+  only ever be for me.  If you use it, or if it's useful, please let me know.  I'll put more effort
+  in if there is actually an audience.   
+
+===== Credits =====
+
+JWSmythe - All the code, unless otherwise noted.
+Radio Thermstat Company of America - API documents, and user manuals.
+
