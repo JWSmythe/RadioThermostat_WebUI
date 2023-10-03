@@ -218,5 +218,6 @@ Send them via the issues tab on Github, or email me directly at jwsmythe[at]jwsm
 ===== Credits ================================================================
 
 * JWSmythe <a href='https://jwsmythe.com/'>https://jwsmythe.com</a> - All the code, unless otherwise noted.
+* BlueRhinos <a href='http://www.bluerhinos.co.uk'>http://www.bluerhinos.co.uk</a> - phpMQTT library.
 * Radio Thermstat Company of America <a href='https://www.radiothermostat.com/'>https://www.radiothermostat.com/</a> - API documents, and user manuals.
 
