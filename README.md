@@ -16,6 +16,13 @@ v1.0 2023.08.23 - First release
 This is shared under the non-commercial Creative Commons CC BY-SA.  You may 
 use and share this code for non-commercial purposes.  If you're going to roll
 it into a product, please contact me for licensing first.
+<<<<<<< HEAD
+=======
+
+<!-- ![alt text](images/tstat_sample_main.png?raw=true) -->
+<img src='images/tstat_sample_main.png' width='300'> <img src='images/tstat_sample_history.png' width='300'>
+
+>>>>>>> dd742c6cf63c8ed7f0c8a897d9608e41e76f0ce6
 
 ===== About =================================================================
    This project is to provide a web interface for the Radio Thermostat CT-30, CT-50, CT80, and 3M50  thermostats.
@@ -76,6 +83,10 @@ it into a product, please contact me for licensing first.
                           I would appreciate getting a copy.
    ./images/            - Some images for the web interface
    ./data/              - MRTG data
+<<<<<<< HEAD
+=======
+
+>>>>>>> dd742c6cf63c8ed7f0c8a897d9608e41e76f0ce6
 ===== Installation ==========================================================
    1) Copy the files for this package to a directory on your local web server.  
    The web server *must* be on the same network segment.  These thermostats
@@ -111,3 +122,111 @@ it into a product, please contact me for licensing first.
    recommend 1 minute.  
    
    */2 * * * *   /usr/local/bin/php /var/www/htdocs/thermostat/tstat_poll.php >> /var/log/thermostat_cron.log 2>&1
+<<<<<<< HEAD
+=======
+
+===== Usage =================================================================
+
+   1) tstat_main.html
+
+      <img src='images/tstat_sample_main.png' width='300' align='right'>
+      This is the main menu.  It's used the same way you'd use the thermostat.
+      * Select the operational mode with the buttons on the left.
+      * Select the fan mode with the buttons on the right.
+      * You can use the up/down buttons to jog the temperature by 1 degree.  It's
+      slow and tempermental.  We're sending the commands correctly, it's totally
+      to do with how the thermostat works
+
+      * 1 day and 7 day graphs are the usage history.
+        * Blue line is the actual temperature at each sample.
+        * Red line is the commanded temperature.  What it should be.
+        * The orange lines can be in one of three positions.
+            * No line means no sample was taken from the thermostat for some reason.
+            * Half a line means the unit was cycled off.
+            * Full line means the unit was cycled on.
+              Ideally, you will see the unit cycled on for 10 to 15 minutes, and then
+              cycled off for the same amount of time.  That's a 50% duty cycle, and
+              is ideal to keep the humidity at a reasonable level.
+
+      * The bottom box has information.
+         * The date, model, and name collected from the thermostat.  If the date is wrong,
+           it should be corrected when you reload the page.  We auto-send a date/time update
+           from this web client.  My thermostat resets to noon if the thermostat is reset,
+           so this is important in getting it on schedule.
+         * The first line of links take you to the various sections.
+         * The second line of links pull more info from the thermostat, and may be interesting
+           to you.  The API info is a full dump of all of the information available via the API.
+         * Everything under "Manufacturer Documentation" is all the docs I have found related
+           to these thermstats.  If you have more documentation, please share, and I'll add it
+           to this repo! 
+
+   2) tstat_scheduler.php
+
+      <img src='images/tstat_sample_scheduler.png' width='500' align='right'>
+      This is the most complex part of this software.  It's in roughly the same format
+      as RTCOA's web interface had.  This is all loaded directly to the thermostat, this
+      web UI doesn't control the thermostat.  Once you save it, you could shut down the
+      web server, and it will keep working.
+      * This page is slow to load and update, because it has to read and write all the
+        information to the thermostat.  There's no way to make it faster, sorry. 
+      * There are 4 slots per day.  You can set the time each happens, and the desired
+        temperature to set.
+      * It holds 7 days of settings, Mon through Sun.  This reflects the internal ordering.
+      * There are two schedules, one for heat, and one for cool.
+      * You can tab between fields, so you don't have to mouse click each one.
+     
+      My schedule is set to work well with my electric company's peak rate scheduling.  Use
+      my schedule as an example.  I will explain it to you. I want the AC to run when power
+      is cheap, and let the house warm up when the power is expensive.
+      * 6am, the thermostat goes up to 70 degrees, to prepare us to wake up in the morning.
+
+      * 11am is the beginning of peak power rates, so I set the thermostat to 78 degrees.  You
+      can see it takes about 5 hours for the house to warm up.  After that, the AC cycles on
+      and off to maintain 78 degrees.
+
+      * 8pm power starts being cheap again.  71 is comfortable for us.
+
+      * 11pm we let the AC cool the house down, to prepare for tomorrow's cycle.
+
+   3) tstat_multi.php
+
+      <img src='images/tstat_sample_history.png' width='300' align='right'>
+      This page is entirely graphs generated from the collected data.  It can help you
+      figure out how to schedule your thermostat better, or if there is some operational
+      problem to address (i.e., dirty filter).  
+
+===== Security ==========
+
+This is not intended to be Internet facing.  If you do, please be sure to use an appropriate 
+htaccess, with both password protection, and restrictions to only allowing your own IP.  If you 
+don't, people will find it, and they will set your thermostat to crazy extremes that will 
+run your power bill up, and potentially risk fire.  I'd prefer my heater doesn't turn on to 90F+
+in the middle of summer.  
+
+===== Bugs / To Do ==========
+
+These are things that should be fixed, but haven't been yet.  If you would like to fix them and 
+submit the changes, I'll happily add them, and credit you for your contributions.  
+
+If you find any bugs in the code, feel free to file them as issues, and I will fix them. 
+Send them via the issues tab on Github, or email me directly at jwsmythe[at]jwsmythe.com. 
+
+* The pages don't scale well on mobile devices.
+* Investigate setting a hold mode to disable schedule.  This might improve the manual temp setting.
+* Make the UI pretty, with a consistent header and footer.  I know it's ugly.
+* Look at enabling dehumidifier mode.  This requires a CT-80 Rev B thermostat, which I don't have.
+* Build a cloud interface.  Make it a public service on a new domain.  No documentation is available,
+  but you can change the cloud URL from the AdHoc setup, and running direct web page.  It should be
+  doable. That might be a destructive process. I only have one thermostat, and it is in use.
+  A donated thermostat would be lovely.
+
+* I recognize that I might be the only person still using this thermostat, so all this work may
+  only ever be for me.  If you use it, or if it's useful, please let me know.  I'll put more effort
+  in if there is actually an audience.   
+
+===== Credits ================================================================
+
+* JWSmythe <a href='https://jwsmythe.com/'>https://jwsmythe.com</a> - All the code, unless otherwise noted.
+* BlueRhinos <a href='http://www.bluerhinos.co.uk'>http://www.bluerhinos.co.uk</a> - phpMQTT library.
+* Radio Thermstat Company of America <a href='https://www.radiothermostat.com/'>https://www.radiothermostat.com/</a> - API documents, and user manuals.
+>>>>>>> dd742c6cf63c8ed7f0c8a897d9608e41e76f0ce6
