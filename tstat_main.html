@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=.75">
 <html>
 <head>
    <title>Radio Thermostat Thermostat</title>
@@ -17,16 +19,44 @@
       };
 
    </style>
+   <!-- Range Slider ================================================== -->
+   <style>
+      /* style range */
+      input[type=range] {
+         width: 100%;
+         max-width: 100%;
+         margin-left: 0;
+      }
+
+      /* style datalist */
+      input[type=range] + datalist {
+         display: flex;
+         margin-top: -4px;
+      }
+      input[type=range] + datalist option {
+         display: inline-block;
+         width: calc((100% - 12px) / (var(--list-length) - 1));
+         text-align: center;
+      }
+      input[type=range] + datalist option:first-child {
+         width: calc((100% - 12px) / ((var(--list-length) - 1) * 2) + 6px);
+         text-align: left;
+      }
+      input[type=range] + datalist option:last-child {
+         width: calc((100% - 12px) / ((var(--list-length) - 1) * 2) + 6px);
+         text-align: right;
+      }         
+   </style>
 <table border='1'>
    <tr>
-   <!-- Begin HVAC Mode Settings -------------------------------------------->   
+   <!-- Begin HVAC Mode Settings ========================================= -->   
    <td style='width:160px;' valign='top'>
       <table style="height:200px;" border='0'>
-         <tr><td>Mode: <span style='font-size:20px'><hvac_mode>--</hvac_mode></span></td></tr>
+         <tr><td>Mode: <span style='font-size:20px'><span id='hvac_mode'>--</span></span></td></tr>
          <tr><td style="height:20px;">Set</td></tr>
          <tr><td style="height:60px;">
             <a href='#' onClick='set_mode_off();'><img src='images/power-black.png' style='width:40px'> Off</a>
-         </td><tr>
+         </td></tr>
          <tr><td style="height:60px;">
             <a href='#' onClick='set_mode_heat();'><span style='color:red; font-size:40px;'>&#128293;</span> Heat</a>
          </td></tr>            
@@ -38,53 +68,69 @@
          </td></tr>
       </table>
    </td>
-   <!-- End HVAC Mode Settings ---------------------------------------------->
-   <!-- Begin Center Section ------------------------------------------------>
+   <!-- End HVAC Mode Settings =========================================== -->
+   <!-- Begin Center Section ==============================================-->
    <td rowspan='1' style='width:180px;' valign='top'>
       Actual
-      <div align='center'><span style='font-size:90px;'><disp_temp>--</disp_temp></span></div>
-      <br><div align='center'><span style='font-size:20px;'>
-         Target: 
-         <span style='color:blue;'><disp_t_cool></disp_t_cool></span>
-         <span style='color:red;'><disp_t_heat></disp_t_heat></span>
+      <div style='text-align: center;'><span style='font-size:90px;' id='disp_temp'>--</span></div>
+      <br><div style='text-align: center;'>
+         <span style='font-size:20px;'>
+            Target: 
+            <span style='color:blue;' id='disp_t_cool'></span>
+            <span style='color:red;' id='disp_t_heat'></span>
+         </span>
       </div> 
       <br>
-      <div align='center' style='color:red; font-weight:900;'>
-      <state_hold></state_hold>
-      <state_override></state_override>
+      <div style='text-align: center; color:red; font-weight:500;'>
+      <a href='#' onClick='set_hold_clear()'>
+         <span id='state_hold'></span></a><br>
+         <span id='state_override'></span>
       </div>
+
+      <input type="range" min="50" max="90" value='0' step='1' style='width: 100%' id="temp-slider" list="range-markers" onChange='set_temp_slider();'>
+      <datalist id="range-markers" style="--list-length: 5;">
+         <option>50</option>
+         <option>60</option>
+         <option>70</option>
+         <option>80</option>
+         <option>90</option>
+      </datalist>
+
+      <!-- Temperature jog up/down buttons
+      This doesn't work well, as there's a long delay between button press, and 
+      the thermostat actually responding to the request.  Use the slider instead. 
+      The javascript is still here, you can enable the buttons by uncommenting
+      the buttons below.
+      -->
+      <!-- 
       <span style='font-size:40px; color:red; float:left;'>&nbsp; &nbsp; <a href='#' onClick='set_temp_up();'>&#129093</a></span> 
       <span style='font-size:40px; color:blue; float:right;'><a href='#' onClick='set_temp_down();'>&#129095</a> &nbsp; &nbsp;</span>
+      -->
    </td>
-   <!-- End Center Section -------------------------------------------------->
-   <!-- Begin Fan Mode Settings --------------------------------------------->
+   <!-- End Center Section =============================================== -->
+   <!-- Begin Fan Mode Settings ========================================== -->
    <td style='width:160px;' valign='top'>
       <table style="height:200px;">
-      <tr><td>Fan Mode: <span style='font-size:20px'><fan_mode>--</fan_mode></span></td></tr>
+      <tr><td>Fan Mode: <span style='font-size:20px' id='fan_mode'>--</span></td></tr>
          <tr><td style="height:30px;">Set</td></tr>
          <tr><td style="height:60px;">
-            <a href='#' onClick='set_fan_off();'><img src='images/power-black.png' style='width:40px'> Off</a>
+            <a href='#' onClick='set_fan_off();'><img src='images/power-black.png' style='width:40px'>Auto</a>
          </td></tr>
          <tr><td style="height:60px;">
-            <a href='#' onClick='set_fan_on();'><img src='images/power-green.png' style='width:40px'> On</a>
+            <a href='#' onClick='set_fan_on();'><img src='images/power-green.png' style='width:40px'>Auto/Circulate</a>
          </td></tr>
          <tr><td style="height:60px;">
-            <a href='#' onClick='set_fan_auto();'><img src='images/automatic_icon_black.png' style='width:40px'> Auto</a>
+            <a href='#' onClick='set_fan_auto();'><img src='images/automatic_icon_black.png' style='width:40px'>On</a>
          </td></tr>
       </table>
    </td>
-   <!-- End Fan Mode Settings ----------------------------------------------->
+
+   <!-- End Fan Mode Settings ============================================ -->
    </tr>
    <tr>
-			<!--- 	<div align='center'>
-						<a href='data/tstat.temp.html'><img src='data/tstat.temp-day.png'></a></div> 
-						Key: <span style='color:green;'>Actual TempF</span>
-					<span style='color:blue;'>Target TempF</span>
-					</div>
-			--->
       <td colspan='3'>
 			1 day:<br>
-			<iframe src='tstat_temp_graph.php?width=500&height=200&days=1.25' width=500 height=210 frameBorder="0" scrolling="no"></iframe>
+			<iframe src="tstat_temp_graph.php?width=500&height=200&days=1.25" width='500' height='210' frameBorder="0" scrolling="no"></iframe>
       </td>
 	</tr>
 	<tr>
@@ -95,11 +141,12 @@
    </tr>
 <tr>
    <td colspan='3'>
-   <span style='font-weight:700;'>Thermostat Date:</span> <disp_day>---</disp_day> <disp_hour>--</disp_hour>:<disp_min>--</disp_min> 
+   <span style='font-weight:700;'>Thermostat Date:</span> 
+      <span id='disp_day'>---</span> <span id='disp_hour'>--</span>:<span id='disp_min'>--</span> 
    <br>
-   <span style='font-weight:700;'>Model:</span> <disp_model>--</disp_model> (FW: <disp_fw>--</disp_fw>)
+      <span style='font-weight:700;'>Model:</span> <span id='disp_model'>--</span> (FW: <span id='disp_fw'>--</span>)
    <br>
-   <span style='font-weight:700;'>Name:</span> <disp_name>--</disp_name>
+   <span style='font-weight:700;'>Name:</span> <span id='disp_name'>--</span>
    <br>
    <a href='tstat_main.html'>Main</a> |
    <a href='tstat_multi.php'>Day/week/month graph</a> |
@@ -118,12 +165,53 @@
 -->   
 <br>
    <span style='font-weight:700;'>Manufacturer Documentation:</span><br>
-   <a href='docs/RadioThermostat CT50 API Guide.pdf' target='new'>API Documentation</a><br>
-   <a href='docs/RadioThermostat CT30 Operation Guide.pdf' target='new'>CT30 Owner's Manual</a> |
-   <a href='docs/RadioThermostat CT50 Operation Guide.pdf' target='new'>CT50 Owner's Manual</a> <br>
-   <a href='docs/RadioThermostat CT80 Operation Guide.pdf' target='new'>CT80 Owner's Manual</a> |
-   <a href='docs/RadioThermostat 3M50 Operation Guide.pdf' target='new'>3M50 Owner's Manual</a> <br>
+   <a href='docs/RadioThermostat+CT50+API+Guide.pdf' target='new'>API Documentation</a><br>
+   <a href='docs/RadioThermostat+CT30+Operation+Guide.pdf' target='new'>CT30 Owner's Manual</a> |
+   <a href='docs/RadioThermostat+CT50+Operation+Guide.pdf' target='new'>CT50 Owner's Manual</a> <br>
+   <a href='docs/RadioThermostat+CT80+Operation+Guide.pdf' target='new'>CT80 Owner's Manual</a> |
+   <a href='docs/RadioThermostat+3M50+Operation+Guide.pdf' target='new'>3M50 Owner's Manual</a> <br>
 </td>
+</tr>
+<tr>
+   <td colspan='3'>
+      <span style='font-weight:700;'>Instructions:</span>
+      <ul>
+         <li> In the LEFT box, set the HVAC mode.  Auto should automatically 
+               detect which mode to use, but isn't reliable. <br><br>
+         <li> In the MIDDLE box, use the slider to set the temperature.  There
+             is a delay of a few seconds while the thermostat sets the new 
+             temperature.  With the manually set temperature, it will set 
+             "Hold" mode.   To switch back to scheduled mode, touch the red 
+             "Hold".<br><br>
+
+         <li> In the RIGHT box, set the fan mode.  Off or Auto will 
+            automatically turn the thermostat on and off. In the API 
+            documentation, they are described as <br><br>
+            0: AUTO<br>
+            1: AUTO/CIRCULATE<br>
+            2: ON <br><br>
+            If you want the fan off, set the fan to mode auto, and the HVAC 
+            mode to off.   
+            <br>
+            For normal operation, set it to Auto.<br><br>
+         <li> The next boxes down show the thermstat activity history. <br><br>
+
+            The blue line is the actual temperature, read at the thermostat.<br><br>
+
+            The red line is the target temperature.  That is, the temperature 
+            you set the thermostat to. <br><br>
+
+            The yellow bar shows if the HVAC is cycled on or off. 
+            No bar means error.<br><br>
+            A half bar means the HVAC is cycled OFF<br>
+            A full bar means the HVAC is cycled ON <br>
+            <br>
+         <li> The thermostat scheduler is under the Schedule link above.  
+            You can set 4 times and temperatures per day.
+      </ul>
+
+
+   </td>
 </tr>
 </table>   
 
@@ -132,83 +220,83 @@
    fetch('tstat_api_gw.php/tstat')
       .then(response => response.json())
       .then(data => {
-         //console.log(data);
-         //document.getElementById('disp_temp').innerHTML = data.temp;
-         document.querySelector("disp_temp").innerHTML = data.temp;
-
+         console.log(data);
+         document.getElementById('disp_temp').innerHTML = data.temp;
 
          if(data.tmode == 0){
-            document.querySelector("hvac_mode").innerHTML = "Off";
+            document.getElementById("hvac_mode").innerHTML = "Off";
          }else if(data.tmode == 1 ){
-            document.querySelector("hvac_mode").innerHTML = "Heat";
+            document.getElementById("hvac_mode").innerHTML = "Heat";
          }else if(data.tmode == 2){
-            document.querySelector("hvac_mode").innerHTML = "Cool";
+            document.getElementById("hvac_mode").innerHTML = "Cool";
          }else if(data.tmode == 3){
-            document.querySelector("hvac_mode").innerHTML = "Auto";
+            document.getElementById("hvac_mode").innerHTML = "Auto";
          }else{
-            document.querySelector("hvac_mode").innerHTML = "Unknown";
+            document.getElementById("hvac_mode").innerHTML = "Unknown";
          }
 
 if (data.fmode == 0){
-            document.querySelector("fan_mode").innerHTML = "Off";
+            document.getElementById("fan_mode").innerHTML = "Auto";
          }else if(data.fmode == 1){
-            document.querySelector("fan_mode").innerHTML = "Auto/Circulate";
+            document.getElementById("fan_mode").innerHTML = "Auto/Circulate";
          }else if(data.fmode == 2){
-            document.querySelector("fan_mode").innerHTML = "On";
+            document.getElementById("fan_mode").innerHTML = "On";
          }else{
-            document.querySelector("fan_mode").innerHTML = "Unknown";
+            document.getElementById("fan_mode").innerHTML = "Unknown";
          }
 
 
          if(data.time.day == 0){
-            document.querySelector("disp_day").innerHTML = "Monday";
+            document.getElementById("disp_day").innerHTML = "Monday";
          }else if(data.time.day == 1){
-            document.querySelector("disp_day").innerHTML = "Tuesday";
+            document.getElementById("disp_day").innerHTML = "Tuesday";
          }else if(data.time.day == 2){
-            document.querySelector("disp_day").innerHTML = "Wednesday";
+            document.getElementById("disp_day").innerHTML = "Wednesday";
          }else if(data.time.day == 3){
-            document.querySelector("disp_day").innerHTML = "Thursday";
+            document.getElementById("disp_day").innerHTML = "Thursday";
          }else if(data.time.day == 4){
-            document.querySelector("disp_day").innerHTML = "Friday";
+            document.getElementById("disp_day").innerHTML = "Friday";
          }else if(data.time.day == 5){
-            document.querySelector("disp_day").innerHTML = "Saturday";
+            document.getElementById("disp_day").innerHTML = "Saturday";
          }else if(data.time.day == 6){
-            document.querySelector("disp_day").innerHTML = "Sunday";
+            document.getElementById("disp_day").innerHTML = "Sunday";
          }else{
-            document.querySelector("disp_day").innerHTML = "Unknown";
+            document.getElementById("disp_day").innerHTML = "Unknown";
          }
 
-         document.querySelector("disp_hour").innerHTML = data.time.hour;
+         document.getElementById("disp_hour").innerHTML = data.time.hour;
 
          // Make human friendly minutes.  People like 0 padding on minutes, 
          // but don't care about hours. 
          if(data.time.minute < 10){
-            document.querySelector("disp_min").innerHTML = "0" + data.time.minute;
+            document.getElementById("disp_min").innerHTML = "0" + data.time.minute;
          }else{
-            document.querySelector("disp_min").innerHTML = data.time.minute;
+            document.getElementById("disp_min").innerHTML = data.time.minute;
          }
          if (data.t_cool > 0){
-            document.querySelector("disp_t_cool").innerHTML = data.t_cool;
+            document.getElementById("disp_t_cool").innerHTML = data.t_cool;
+            document.getElementById('temp-slider').value = data.t_cool;
          };
 
          if (data.t_heat > 0){
-            document.querySelector("disp_t_heat").innerHTML = data.t_heat;
+            document.getElementById("disp_t_heat").innerHTML = data.t_heat;
+            document.getElementById('temp-slider').value = data.t_heat;
          };
 
          if(data.override == 0){
-            document.querySelector("state_override").innerHTML = "";
+            document.getElementById("state_override").innerHTML = '';
          }else if(data.override == 1){
-            document.querySelector("state_override").innerHTML = "Override";
+            document.getElementById("state_override").innerHTML = "Override";
          }else{
-            document.querySelector("state_override").innerHTML = "Unknown";
+            document.getElementById("state_override").innerHTML = "Unknown";
          }
 
          if(data.hold == 0){
-            document.querySelector("state_hold").innerHTML = "";
+            document.getElementById("state_hold").innerHTML = "";
          }else if(data.hold == 1){
-            document.querySelector("state_hold").innerHTML = "Hold";
+            document.getElementById("state_hold").innerHTML = "Hold";
          }else{
-            document.querySelector("state_hold").innerHTML = "Unknown";
+            document.getElementById("state_hold").innerHTML = "Unknown";
          }
 
       });
@@ -218,8 +306,8 @@ if (data.fmode == 0){
    fetch('tstat_api_gw.php/tstat/model')
       .then(response => response.json())
       .then(data => {
-         //console.log(data);
-         document.querySelector("disp_model").innerHTML = data.model;   
+         console.log(data);
+         document.getElementById("disp_model").innerHTML = data.model;
       });
    }
 
@@ -227,8 +315,8 @@ if (data.fmode == 0){
    fetch('tstat_api_gw.php/sys/firmware')
       .then(response => response.json())
       .then(data => {
-         //console.log(data);
-         document.querySelector("disp_fw").innerHTML = data.fw_version;   
+         console.log(data);
+         document.getElementById("disp_fw").innerHTML = data.fw_version; 
       });
    }
 
@@ -236,8 +324,8 @@ if (data.fmode == 0){
    fetch('tstat_api_gw.php/sys/name')
       .then(response => response.json())
       .then(data => {
-         //console.log(data);
-         document.querySelector("disp_name").innerHTML = data.name;   
+         console.log(data);
+         document.getElementById("disp_name").innerHTML = data.name; 
       });
    }   
   
@@ -278,72 +366,6 @@ if (data.fmode == 0){
       console.error('Error:', error);
    });
 }
-
-function set_temp_down(){
-   // This lowers the temp by 1 degree in the current HVAC mode.
-   // Get the tmode from the text on the page.  Avoid extra API calls.
-
-   if (document.querySelector("hvac_mode").innerHTML == "Off"){
-      tmode = 0;
-   }else if (document.querySelector("hvac_mode").innerHTML == "Heat"){
-      tmode = 1;
-   }else if (document.querySelector("hvac_mode").innerHTML == "Cool"){
-      tmode = 2;
-   }else if (document.querySelector("hvac_mode").innerHTML == "Auto"){
-      tmode = 3;
-   }else{
-      tmode = "Unknown";
-   }
-
-   t_cool = document.querySelector("disp_t_cool").innerHTML;
-   t_heat = document.querySelector("disp_t_heat").innerHTML;
-
-   if (t_cool > 0){
-      // We're in cooling mode.
-      t_cool = parseInt(document.querySelector("disp_t_cool").innerHTML);
-      t_cool = t_cool-1;
-      t_heat = '';
-
-      this_body = JSON.stringify({
-                                    "tmode": tmode,
-                                    "t_cool": t_cool
-                                 })
-   }else if (t_heat > 0){
-      t_heat = parseInt(document.querySelector("disp_t_heat").innerHTML);
-      t_heat = t_heat-1;
-      t_cool = '';
-      this_body = JSON.stringify({
-                     "tmode": tmode,
-                     "t_cool": t_heat
-                  })
-   };
-   
-   fetch('tstat_api_gw.php/tstat', {
-      method: 'POST',
-      headers: {
-         'Content-Type': 'application/json',
-      },
-      body: this_body
-   })
-   .then(response => response.json())
-   .then(data => {
-      console.log('Success:', data);
-   })
-   .catch((error) => {
-      console.error('Error:', error);
-   });
-   // Refresh the thermostat for the new value, rather than waiting for it to happen on schedule.
-   read_tstat();
-};
-
-   <!--
-      /*
-      // The API documentation lists fmode wrong.  
-      0: AUTO  |  1: AUTO/CIRCULATE |  2: ON
-      I believe it is actually 
-      O: Off | 1: Auto | 2: ON 
-      */
-   -->
 
 function set_mode_off(){
    this_body = JSON.stringify({
@@ -497,18 +519,20 @@ function set_fan_auto(){
 };
 
 // ----- Temperature Settings ------------------------------------------------
+// hset_temp_up/set_temp_down are only for reference, they aren't being used.
+// They may not work properly, lots of changes have been made around them. 
 
 function set_temp_up(){
    // This lowers the temp by 1 degree in the current HVAC mode.
    // Get the tmode from the text on the page.  Avoid extra API calls.
 
-   if (document.querySelector("hvac_mode").innerHTML == "Off"){
+   if (document.getElementById("hvac_mode").innerHTML == "Off"){
       tmode = 0;
-   }else if (document.querySelector("hvac_mode").innerHTML == "Heat"){
+   }else if (document.getElementById("hvac_mode").innerHTML == "Heat"){
       tmode = 1;
-   }else if (document.querySelector("hvac_mode").innerHTML == "Cool"){
+   }else if (document.getElementById("hvac_mode").innerHTML == "Cool"){
       tmode = 2;
-   }else if (document.querySelector("hvac_mode").innerHTML == "Auto"){
+   }else if (document.getElementById("hvac_mode").innerHTML == "Auto"){
       tmode = 3;
    }else{
       tmode = "Unknown";
@@ -525,7 +549,8 @@ function set_temp_up(){
 
       this_body = JSON.stringify({
                                     "tmode": tmode,
-                                    "t_cool": t_cool
+                                    "t_cool": t_cool,
+                                    "hold": 0
                                  })
    }else if (t_heat > 0){
       t_heat = parseInt(document.querySelector("disp_t_heat").innerHTML);
@@ -533,7 +558,8 @@ function set_temp_up(){
       t_cool = '';
       this_body = JSON.stringify({
                      "tmode": tmode,
-                     "t_cool": t_heat
+                     "t_cool": t_heat,
+                     "hold": 0
                   })
    };
    
@@ -552,7 +578,196 @@ function set_temp_up(){
       console.error('Error:', error);
    });
    // Refresh the thermostat for the new value, rather than waiting for it to happen on schedule.
+   console.log(this_body);
    read_tstat();   
+};
+
+function set_temp_down(){
+   // This lowers the temp by 1 degree in the current HVAC mode.
+   // Get the tmode from the text on the page.  Avoid extra API calls.
+
+   if (document.getElementById("hvac_mode").innerHTML == "Off"){
+      tmode = 0;
+   }else if (document.getElementById("hvac_mode").innerHTML == "Heat"){
+      tmode = 1;
+   }else if (document.getElementById("hvac_mode").innerHTML == "Cool"){
+      tmode = 2;
+   }else if (document.getElementById("hvac_mode").innerHTML == "Auto"){
+      tmode = 3;
+   }else{
+      tmode = "Unknown";
+   }
+
+   t_cool = document.querySelector("disp_t_cool").innerHTML;
+   t_heat = document.querySelector("disp_t_heat").innerHTML;
+
+   if (t_cool > 0){
+      // We're in cooling mode.
+      t_cool = parseInt(document.querySelector("disp_t_cool").innerHTML);
+      t_cool = t_cool-1;
+      t_heat = '';
+
+      this_body = JSON.stringify({
+                                    "tmode": tmode,
+                                    "t_cool": t_cool,
+                                    "hold": 0
+                                 })
+   }else if (t_heat > 0){
+      t_heat = parseInt(document.querySelector("disp_t_heat").innerHTML);
+      t_heat = t_heat-1;
+      t_cool = '';
+      this_body = JSON.stringify({
+                     "tmode": tmode,
+                     "t_cool": t_heat,
+                     "hold": 0
+                  })
+   };
+   
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+   //alert(this_body);
+   // Refresh the thermostat for the new value, rather than waiting for it to happen on schedule.
+   console.log(this_body);
+   read_tstat();
+};
+
+function set_temp_slider(){
+   // Set the temperature to a specific value, determined by the slider, in 
+   // the current HVAC mode.
+   // Get the tmode from the text on the page.  Avoid extra API calls.
+
+   var temp_slider_val = parseInt(document.getElementById('temp-slider').value);
+   
+   //alert(temp_slider_val);
+   //return;
+
+   if (document.getElementById("hvac_mode").innerHTML == "Off"){
+      tmode = 0;
+   }else if (document.getElementById("hvac_mode").innerHTML == "Heat"){
+      tmode = 1;
+   }else if (document.getElementById("hvac_mode").innerHTML == "Cool"){
+      tmode = 2;
+   }else if (document.getElementById("hvac_mode").innerHTML == "Auto"){
+      tmode = 3;
+   }else{
+      tmode = "Unknown";
+   }
+   
+   t_cool = document.getElementById("disp_t_cool").innerHTML;
+   t_heat = document.getElementById("disp_t_heat").innerHTML;
+
+   if (t_cool > 0){
+      // We're in cooling mode.
+      t_cool = parseInt(document.getElementById("disp_t_cool").innerHTML);
+      //t_cool = t_cool-1;
+      t_cool = temp_slider_val;
+      t_heat = '';
+
+      this_body = JSON.stringify({
+                                    "tmode": tmode,
+                                    "t_cool": t_cool,
+                                    "hold": 1
+                                 })
+   }else if (t_heat > 0){
+      t_heat = parseInt(document.querySelector("disp_t_heat").innerHTML);
+      //t_heat = t_heat-1;
+      t_heat = temp_slider_val;
+      t_cool = '';
+      this_body = JSON.stringify({
+                     "tmode": tmode,
+                     "t_cool": t_heat,
+                     "hold": 1
+                  })
+   };
+
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+   console.log(this_body);
+   // Refresh the thermostat for the new value, rather than waiting for it to happen on schedule.
+   read_tstat();
+};
+
+
+function set_hold_clear(){
+   // This clears the HVAC hold mode.
+
+   if (document.getElementById("hvac_mode").innerHTML == "Off"){
+      tmode = 0;
+   }else if (document.getElementById("hvac_mode").innerHTML == "Heat"){
+      tmode = 1;
+   }else if (document.getElementById("hvac_mode").innerHTML == "Cool"){
+      tmode = 2;
+   }else if (document.getElementById("hvac_mode").innerHTML == "Auto"){
+      tmode = 3;
+   }else{
+      tmode = "Unknown";
+   }
+
+   t_cool = document.getElementById("disp_t_cool").innerHTML;
+   t_heat = document.getElementById("disp_t_heat").innerHTML;
+
+   if (t_cool > 0){
+      // We're in cooling mode.
+      t_cool = parseInt(document.getElementById("disp_t_cool").innerHTML);
+      t_cool = t_cool-1;
+      t_heat = '';
+
+      this_body = JSON.stringify({
+                                    "tmode": tmode,
+                                    "hold": 0
+                                 })
+   }else if (t_heat > 0){
+      t_heat = parseInt(document.getElementById("disp_t_heat").innerHTML);
+      t_heat = t_heat-1;
+      t_cool = '';
+      this_body = JSON.stringify({
+                     "tmode": tmode,
+                     "hold": 0
+                  })
+   };
+   
+   fetch('tstat_api_gw.php/tstat', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json',
+      },
+      body: this_body
+   })
+   .then(response => response.json())
+   .then(data => {
+      console.log('Success:', data);
+   })
+   .catch((error) => {
+      console.error('Error:', error);
+   });
+   // alert(this_body);
+   // Refresh the thermostat for the new value, rather than waiting for it to happen on schedule.
+   console.log(this_body);
+   read_tstat();
 };
 
    // Read thermostat immediately, and then update every 15 seconds.   
