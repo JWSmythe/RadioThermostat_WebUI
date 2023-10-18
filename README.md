@@ -18,10 +18,7 @@ use and share this code for non-commercial purposes.  If you're going to roll
 it into a product, please contact me for licensing first.
 
 <!-- ![alt text](images/tstat_sample_main.png?raw=true) -->
-<img src='images/tstat_sample_main.png' width='300'><img src='images/tstat_sample_history.png' width='300'>
-
-<!-- ![alt text](images/tstat_sample_main.png?raw=true) -->
-<img src='images/tstat_sample_main.png' width='300'><img src='images/tstat_sample_history.png' width='300'>
+<img src='images/tstat_sample_main.png' width='300'> <img src='images/tstat_sample_history.png' width='300'>
 
 
 ===== About =================================================================
