@@ -25,6 +25,7 @@ it into a product, please contact me for licensing first.
 
 
 ===== About =================================================================
+
    This project is to provide a web interface for the Radio Thermostat CT-30, CT-50, CT80, and 3M50  thermostats.
    
    As of May 15, 2023, the official Radio Thermostat web app is being 
@@ -62,6 +63,7 @@ it into a product, please contact me for licensing first.
    5) Cron or similar scheduler, if you want graphing to work.
 
 ===== Files ================================================================= 
+
    mrtg.thermostat.conf - MRTG configuration file, for temp/target graph
    phpMQTT.php          - MQTT library from https://github.com/bluerhinos/phpMQTT
    tstat_api_gw.php     - PHP to send API requests directly to the thermostat
@@ -83,7 +85,9 @@ it into a product, please contact me for licensing first.
                           I would appreciate getting a copy.
    ./images/            - Some images for the web interface
    ./data/              - MRTG data
+
 ===== Installation ==========================================================
+
    1) Copy the files for this package to a directory on your local web server.  
    The web server *must* be on the same network segment.  These thermostats
    do not have *ANY* security to them.  There is no authentication for API 
